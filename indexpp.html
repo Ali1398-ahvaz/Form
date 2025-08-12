@@ -1,16 +1,4 @@
-// Professional Customer Service Dashboard (Single-file React component) // Author (header): آقای مهندس لطیف التجار بزرگ // Tailwind CSS utility classes are used. Component is production-ready single-file React default export. // Features included: // - Top header with author name // - Left sidebar (Navigation) // - Overview cards (Stats) // - Ticket list with search, filters, tags // - Ticket detail / chat panel with quick-reply templates // - Simple mock data and local state (no backend) // - Responsive layout, accessible controls
 
-import React, { useState, useMemo } from 'react'; import { motion } from 'framer-motion';
-
-export default function CustomerServiceDashboard() { const [query, setQuery] = useState(''); const [selectedTicketId, setSelectedTicketId] = useState(null); const [tickets, setTickets] = useState(sampleTickets()); const [filter, setFilter] = useState('all'); const [replyText, setReplyText] = useState('');
-
-const filtered = useMemo(() => { return tickets.filter(t => { if (filter !== 'all' && t.status !== filter) return false; if (!query) return true; const q = query.toLowerCase(); return ( t.title.toLowerCase().includes(q) || t.customer.name.toLowerCase().includes(q) || t.lastMessage.toLowerCase().includes(q) ); }); }, [tickets, query, filter]);
-
-const selected = tickets.find(t => t.id === selectedTicketId) || filtered[0] || null;
-
-function sendReply() { if (!selected) return; if (!replyText.trim()) return; const now = new Date().toLocaleString(); const updated = tickets.map(t => t.id === selected.id ? { ...t, messages: [...t.messages, { from: 'agent', text: replyText, time: now }], lastMessage: replyText } : t ); setTickets(updated); setReplyText(''); }
-
-function quickClose(id) { setTickets(tickets.map(t => (t.id === id ? { ...t, status: 'closed' } : t))); }
 
 return ( <div className="min-h-screen bg-gray-50 text-gray-800 font-sans"> {/* Header */} <header className="bg-white shadow-sm sticky top-0 z-20"> <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="flex items-center justify-between h-16"> <div className="flex items-center gap-4"> <div className="text-2xl font-bold">نرم‌افزار خدمات مشتریان</div> <div className="text-sm text-gray-500">پنل مدیریت — پاسخگویی سریع و حرفه‌ای</div> </div> <div className="flex items-center gap-4"> <div className="text-sm text-gray-700">نویسنده: <span className="font-semibold">آقای مهندس لطیف التجار بزرگ</span></div> <div className="px-3 py-1 rounded-lg bg-gray-100 text-sm">آنلاین</div> </div> </div> </div> </header>
 
