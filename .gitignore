@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>مرکز دانلود — شباهت به Soft98</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; /* deep background */
+      --card:#0b1220;
+      --muted:#9fb3c8;
+      --soft98-blue:#0c6ea8; /* soft98-like */
+      --accent:#19a7d1;
+      --glass: rgba(255,255,255,0.03);
+      --glass-2: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Vazirmatn',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg,var(--bg), #071225 120%);
+      color:#e6f2fb;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Header */
+    header{
+      background: linear-gradient(90deg,var(--soft98-blue), #0ea5a7);
+      padding:18px 22px;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+      border-bottom-left-radius:12px;
+      border-bottom-right-radius:12px;
+    }
+    .wrap{max-width:1200px;margin:18px auto;padding:0 16px}
+    .topbar{display:flex;align-items:center;gap:18px;justify-content:space-between}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{
+      width:64px;height:64px;border-radius:12px;background:#fff;padding:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.25)
+    }
+    .logo img{width:100%;height:100%;object-fit:contain}
+    h1{margin:0;font-size:20px}
+    .tag{font-size:13px;opacity:.95}
+
+    nav.menu{display:flex;gap:8px;align-items:center}
+    nav.menu a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600;background:rgba(255,255,255,0.08)}
+    nav.menu a:hover{transform:translateY(-3px)}
+
+    /* Search & categories */
+    .hero{margin-top:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;display:flex;gap:18px;align-items:center}
+    .search{flex:1;display:flex;gap:10px}
+    input[type=search]{flex:1;padding:12px 14px;border-radius:10px;border:none;background:var(--glass);color:inherit;outline:2px solid transparent;transition:outline .15s}
+    input[type=search]:focus{outline:2px solid rgba(255,255,255,0.06)}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--soft98-blue));border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+
+    .cats{display:flex;gap:10px;flex-wrap:wrap}
+    .cat{padding:8px 12px;border-radius:999px;background:var(--glass-2);font-weight:600;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+    .cat.active{background:rgba(255,255,255,0.06);color:#fff}
+
+    main{margin-top:18px}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+
+    /* Left column: content */
+    .content .section{background:var(--card);padding:14px;border-radius:12px}
+    .featured-list{display:flex;flex-direction:column;gap:12px}
+    .featured{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    .featured img{width:72px;height:72px;border-radius:10px;object-fit:contain;background:#fff;padding:8px}
+    .featured .meta{flex:1}
+    .featured h3{margin:0;font-size:16px}
+    .featured p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .download-btn{padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
+
+    /* App grid */
+    .apps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .app{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center}
+    .app img{width:56px;height:56px;border-radius:10px;object-fit:contain;background:#fff;padding:6px}
+    .app .info{flex:1}
+    .app h4{margin:0;font-size:15px}
+    .app p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .app .meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Right column: sidebar */
+    aside.sidebar .box{background:var(--card);padding:12px;border-radius:12px;margin-bottom:12px}
+    .small-list{display:flex;flex-direction:column;gap:8px}
+    .small-item{display:flex;gap:10px;align-items:center}
+    .small-item img{width:44px;height:44px;border-radius:8px}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px;padding:18px}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .grid{grid-template-columns:1fr}
+      .apps-grid{grid-template-columns:repeat(2,1fr)}
+      .logo{width:52px;height:52px}
+    }
+    @media (max-width:560px){
+      .apps-grid{grid-template-columns:1fr}
+      h1{font-size:16px}
+      .brand .tag{display:none}
+      .topbar{flex-direction:column;align-items:flex-start;gap:10px}
+      nav.menu{flex-wrap:wrap}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="لوگو"></div>
+        <div>
+          <h1>مرکز دانلود نرم‌افزار — شبیه Soft98</h1>
+          <div class="tag">دانلود نرم‌افزار، ابزارها، بازی‌ها و اپلیکیشن‌ها</div>
+        </div>
+      </div>
+      <nav class="menu" aria-label="منوی اصلی">
+        <a href="#">خانه</a>
+        <a href="#apps">برنامه‌ها</a>
+        <a href="#games">بازی‌ها</a>
+        <a href="#mobile">اندروید</a>
+        <a href="#contact">تماس</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <div style="flex:1">
+        <div class="search" role="search">
+          <input id="q" type="search" placeholder="جست‌وجو نام برنامه، توضیح یا توسعه‌دهنده..." aria-label="جست‌وجو">
+          <button id="searchBtn" class="btn">جست‌وجو</button>
+        </div>
+        <div style="margin-top:12px" class="cats" role="list">
+          <div class="cat active" data-cat="all">همه</div>
+          <div class="cat" data-cat="ارتباطات">ارتباطات</div>
+          <div class="cat" data-cat="مرورگر">مرورگر</div>
+          <div class="cat" data-cat="رسانه">رسانه</div>
+          <div class="cat" data-cat="توسعه‌دهنده">توسعه‌دهنده</div>
+          <div class="cat" data-cat="ابزار">ابزار</div>
+        </div>
+      </div>
+      <div style="width:320px">
+        <div class="box" style="background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:12px">
+          <h4 style="margin:0 0 8px">پیشنهاد ویژه</h4>
+          <div style="display:flex;gap:10px;align-items:center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="vscode" style="width:64px;height:64px;background:#fff;padding:8px;border-radius:10px;object-fit:contain">
+            <div>
+              <div style="font-weight:700">Visual Studio Code</div>
+              <div style="color:var(--muted);font-size:13px;margin-top:6px">ویرایشگر محبوب توسعه‌دهندگان</div>
+              <a class="download-btn" href="https://code.visualstudio.com/" target="_blank" rel="noreferrer" style="display:inline-block;margin-top:8px">دانلود از منبع</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="grid">
+      <div class="content">
+        <section class="section">
+          <h2 style="margin:0 0 10px">جدیدترین نرم‌افزارها</h2>
+          <div class="featured-list" id="featured">
+            <!-- JS will populate -->
+          </div>
+
+          <h3 style="margin-top:16px">همه برنامه‌ها</h3>
+          <div class="apps-grid" id="apps">
+            <!-- JS will populate cards -->
+          </div>
+        </section>
+      </div>
+
+      <aside class="sidebar">
+        <div class="box">
+          <h4 style="margin:0 0 8px">داغ‌ترین‌ها</h4>
+          <div class="small-list" id="hot">
+            <!-- JS populate -->
+          </div>
+        </div>
+
+        <div class="box">
+          <h4 style="margin:0 0 8px">دسته‌ها</h4>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="#" class="cat">ارتباطات</a>
+            <a href="#" class="cat">رسانه</a>
+            <a href="#" class="cat">ابزار</a>
+            <a href="#" class="cat">توسعه‌دهنده</a>
+            <a href="#" class="cat">مرورگر</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <h4 style="margin:0 0 8px">نکات امنیتی</h4>
+          <p style="color:var(--muted);font-size:13px;margin:0">قبل از نصب، فایل‌های دانلودی را با آنتی‌ویروس بررسی کنید و فقط از لینک‌های رسمی استفاده کنید.</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      © 2025 مرکز دانلود — تهیه شده توسط مرتض کتانباف — قبل از نصب فایل‌ها را بررسی کنید.
+    </footer>
+  </div>
+
+  <script>
+    const appsData = [
+      {id:1,name:'Telegram Desktop',desc:'پیام‌رسان امن و محبوب',cat:'ارتباطات',img:'https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg',link:'https://desktop.telegram.org/'},
+      {id:2,name:'Google Chrome',desc:'مرورگر سریع و سازگار',cat:'مرورگر',img:'https://upload.wikimedia.org/wikipedia/commons/8/87/Google_Chrome_icon_%282011%29.png',link:'https://www.google.com/chrome/'},
+      {id:3,name:'VLC Media Player',desc:'پخش‌کنندهٔ قدرتمند صوت و ویدئو',cat:'رسانه',img:'https://upload.wikimedia.org/wikipedia/commons/6/6b/VLC_icon.svg',link:'https://www.videolan.org/vlc/'},
+      {id:4,name:'Visual Studio Code',desc:'ویرایشگر کد مایکروسافت',cat:'توسعه‌دهنده',img:'https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg',link:'https://code.visualstudio.com/'},
+      {id:5,name:'7-Zip',desc:'نرم‌افزار فشرده‌سازی رایگان',cat:'ابزار',img:'https://upload.wikimedia.org/wikipedia/commons/1/10/7zip_logo.svg',link:'https://www.7-zip.org/'},
+      {id:6,name:'Zoom',desc:'کنفرانس ویدئویی',cat:'ارتباطات',img:'https://upload.wikimedia.org/wikipedia/commons/5/5b/Zoom_Communications_Logo.png',link:'https://zoom.us/download'},
+      {id:7,name:'Spotify',desc:'پخش موسیقی آنلاین',cat:'رسانه',img:'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',link:'https://www.spotify.com/'},
+      {id:8,name:'Firefox',desc:'مرورگر آزاد و امن',cat:'مرورگر',img:'https://upload.wikimedia.org/wikipedia/commons/a/a0/Firefox_logo%2C_2019.svg',link:'https://www.mozilla.org/firefox/'},
+      {id:9,name:'Notepad++',desc:'ویرایشگر متن سبک',cat:'توسعه‌دهنده',img:'https://notepad-plus-plus.org/images/logo.svg',link:'https://notepad-plus-plus.org/downloads/'},
+    ];
+
+    const featuredEl = document.getElementById('featured');
+    const appsEl = document.getElementById('apps');
+    const hotEl = document.getElementById('hot');
+
+    function createFeaturedCard(app){
+      const div = document.createElement('div'); div.className='featured';
+      div.innerHTML = `
+        <img src="${app.img}" alt="${app.name} لوگو">
+        <div class="meta">
+          <h3>${app.name}</h3>
+          <p>${app.desc}</p>
+        </div>
+        <div><a class="download-btn" href="${app.link}" target="_blank" rel="noreferrer">دانلود</a></div>
+      `;
+      return div;
+    }
+
+    function createAppCard(app){
+      const div = document.createElement('div'); div.className='app';
+      div.innerHTML = `
+        <img src="${app.img}" alt="${app.name} لوگو">
+        <div class="info">
+          <h4>${app.name}</h4>
+          <p>${app.desc}</p>
+          <div class="meta">دسته: ${app.cat}</div>
+        </div>
+        <div>
+          <a class="download-btn" href="${app.link}" target="_blank" rel="noreferrer">دانلود</a>
+        </div>
+      `;
+      return div;
+    }
+
+    // populate
+    const featured = appsData.slice(0,4);
+    featured.forEach(a => featuredEl.appendChild(createFeaturedCard(a)));
+    appsData.forEach(a => appsEl.appendChild(createAppCard(a)));
+    appsData.slice(0,5).forEach(a => {
+      const d = document.createElement('div'); d.className='small-item';
+      d.innerHTML = `<img src="${a.img}" alt="${a.name}"><div><div style="font-weight:700">${a.name}</div><div style="color:var(--muted);font-size:13px">${a.desc}</div></div>`;
+      hotEl.appendChild(d);
+    });
+
+    // search & filter
+    const cats = Array.from(document.querySelectorAll('.cat'));
+    cats.forEach(c => c.addEventListener('click', e=>{
+      cats.forEach(x=>x.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      const cat = e.currentTarget.dataset.cat || e.currentTarget.textContent;
+      filterApps(cat==='all' ? 'all' : cat);
+    }));
+
+    document.getElementById('searchBtn').addEventListener('click', ()=>{
+      doSearch();
+    });
+    document.getElementById('q').addEventListener('keyup', (e)=>{ if(e.key==='Enter') doSearch(); });
+
+    function doSearch(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const active = document.querySelector('.cat.active').dataset.cat || 'all';
+      filterApps(active,q);
+    }
+
+    function filterApps(cat='all', q=''){
+      appsEl.innerHTML='';
+      let arr = appsData.slice();
+      if(cat && cat!=='all') arr = arr.filter(a=>a.cat===cat);
+      if(q) arr = arr.filter(a=> (a.name + ' ' + a.desc).toLowerCase().includes(q));
+      if(arr.length===0){ appsEl.innerHTML='<div style="padding:18px;color:var(--muted)">هیچ برنامه‌ای با این مشخصات پیدا نشد.</div>'; return }
+      arr.forEach(a=>appsEl.appendChild(createAppCard(a)));
+    }
+
+  </script>
+</body>
+</html>
