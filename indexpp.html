@@ -1,130 +1,108 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>نرم‌افزار خدمات مشتریان</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-<style>
-body { background-color: #f8f9fa; }
-header {
-  background-color: #0d6efd;
-  color: white;
-  padding: 1rem;
-  text-align: center;
-  font-size: 1.5rem;
-}
-.ticket-card {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  border-radius: 10px;
-}
-</style>
-</head>
-<body>
-<header>
-  نویسنده: آقای مهندس لطیف التجار بزرگ
-</header>
+import React, { useEffect, useMemo, useRef, useState } from "react"; import { motion } from "framer-motion"; import { Delete, Equal, LoaderCircle } from "lucide-react";
 
-<div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>مدیریت تیکت‌ها</h3>
-    <button class="btn btn-success" id="btn-new">تیکت جدید</button>
-  </div>
-  <div id="ticket-list" class="row g-3"></div>
-</div>
+// Helper: sanitize and evaluate expression safely (only numbers, ops, parens, dots, spaces) function evaluateExpression(expr: string): number | string { try { // Normalize Persian/Arabic digits and operators const map: Record<string, string> = { "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4", "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9", "×": "*", "÷": "/", "−": "-", "٪": "%", }; const normalized = expr.replace(/[۰-۹×÷−٪]/g, (m) => map[m] ?? m);
 
-<!-- Modal New Ticket -->
-<div class="modal fade" id="modalNew" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">ثبت تیکت جدید</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label">عنوان</label>
-          <input type="text" id="ticket-title" class="form-control">
+// Only allow digits, operators, parentheses, dot, spaces
+if (/[^0-9+\-*/%().\s]/.test(normalized)) return "ورودی نامعتبر";
+
+// Convert percentage like `50%` -> `(50/100)` and `a%b` -> `a% b` remains modulo
+const pctHandled = normalized.replace(/(\d+(?:\.\d+)?)%/g, "($1/100)");
+
+// Disallow dangerous patterns
+if (/()/g.test(pctHandled)) return "عبارت ناقص";
+
+// Evaluate
+// eslint-disable-next-line no-new-func
+const result = Function(`"use strict"; return (${pctHandled})`)();
+if (typeof result === "number" && isFinite(result)) {
+  return result;
+}
+return "عبارت نامعتبر";
+
+} catch { return "خطای محاسبه"; } }
+
+const keys: Array<{ label: string; value?: string; className?: string }> = [ { label: "AC", value: "AC", className: "col-span-1" }, { label: "(", value: "(" }, { label: ")", value: ")" }, { label: "÷", value: "/", className: "text-xl" },
+
+{ label: "7" }, { label: "8" }, { label: "9" }, { label: "×", value: "*", className: "text-xl" }, { label: "4" }, { label: "5" }, { label: "6" }, { label: "−", value: "-", className: "text-xl" }, { label: "1" }, { label: "2" }, { label: "3" }, { label: "+", value: "+", className: "text-xl" }, { label: "%", value: "%" }, { label: "0" }, { label: "." }, { label: "=", value: "=" , className: "text-xl"}, ];
+
+export default function CalculatorPro() { const [expr, setExpr] = useState<string>(""); const [ans, setAns] = useState<string>("0"); const [isEvaluating, setIsEvaluating] = useState(false); const exprRef = useRef<HTMLDivElement>(null);
+
+// Live preview result useEffect(() => { if (!expr) { setAns("0"); return; } const id = setTimeout(() => { const r = evaluateExpression(expr); setAns(String(r)); }, 120); return () => clearTimeout(id); }, [expr]);
+
+useEffect(() => { const onKey = (e: KeyboardEvent) => { const allowed = "0123456789+-*/().%"; if (e.key === "Enter") { e.preventDefault(); handleEquals(); return; } if (e.key === "Backspace") { e.preventDefault(); handleDel(); return; } if (e.key === "Escape") { e.preventDefault(); handleAC(); return; } if (allowed.includes(e.key)) { e.preventDefault(); setExpr((s) => s + e.key); } }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
+
+const handlePress = (k: string) => { if (k === "AC") return handleAC(); if (k === "=") return handleEquals(); setExpr((s) => s + k); };
+
+const handleEquals = () => { setIsEvaluating(true); const r = evaluateExpression(expr); setIsEvaluating(false); if (typeof r === "number") { const pretty = Number(r.toFixed(12)).toString(); setExpr(pretty); setAns(pretty); } else { setAns(String(r)); } };
+
+const handleAC = () => { setExpr(""); setAns("0"); };
+
+const handleDel = () => { setExpr((s) => s.slice(0, -1)); };
+
+return ( <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4"> <div className="w-full max-w-md"> {/* Header / Author */} <div className="mb-4 text-center"> <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800"> ماشین حساب حرفه‌ای </h1> <p className="mt-2 text-sm sm:text-base text-slate-600">نویسنده: <span className="mx-2 px-3 py-1 rounded-2xl bg-slate-900 text-white text-base sm:text-lg font-bold inline-block"> مکی لویمی </span> </p> </div>
+
+{/* Calculator Card */}
+    <div className="rounded-2xl shadow-xl bg-white p-4 sm:p-6 border border-slate-200">
+      {/* Display */}
+      <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 sm:p-4 mb-3 sm:mb-4">
+        <div ref={exprRef} className="min-h-[40px] text-right font-mono text-xl sm:text-2xl text-slate-800 break-words">
+          {expr || <span className="text-slate-400">۰</span>}
         </div>
-        <div class="mb-3">
-          <label class="form-label">شرح مشکل</label>
-          <textarea id="ticket-desc" class="form-control"></textarea>
+        <div className="mt-2 flex items-center justify-between">
+          <div className="text-xs text-slate-400">نتیجهٔ زنده</div>
+          <div className="font-mono text-2xl sm:text-3xl text-slate-900">{ans}</div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
-        <button class="btn btn-primary" id="save-ticket">ذخیره</button>
+
+      {/* Controls Row */}
+      <div className="flex items-center justify-between mb-2">
+        <button
+          onClick={handleAC}
+          className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm border border-rose-200 shadow-sm"
+          aria-label="پاک‌کردن همه"
+        >
+          AC
+        </button>
+        <button
+          onClick={handleDel}
+          className="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm border border-amber-200 shadow-sm flex items-center gap-1"
+          aria-label="حذف یک کاراکتر"
+        >
+          <Delete className="w-4 h-4" /> حذف
+        </button>
+      </div>
+
+      {/* Keypad */}
+      <div className="grid grid-cols-4 gap-2">
+        {keys.map((k) => (
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            key={k.label}
+            onClick={() => handlePress(k.value ?? k.label)}
+            className={`select-none rounded-2xl px-4 py-3 text-lg font-semibold shadow-sm border border-slate-200 bg-slate-100 hover:bg-slate-200 transition ${k.className ?? ""} ${
+              k.label === "=" ? "bg-slate-900 text-white hover:bg-black" : ""
+            }`}
+            aria-label={`کلید ${k.label}`}
+          >
+            {k.label === "=" && isEvaluating ? (
+              <LoaderCircle className="w-5 h-5 animate-spin mx-auto" />
+            ) : k.label === "=" ? (
+              <span className="inline-flex items-center gap-2"><Equal className="w-5 h-5"/>=</span>
+            ) : (
+              k.label
+            )}
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Footer hints */}
+      <div className="mt-3 text-xs text-slate-500 flex items-center justify-between">
+        <span>می‌توانید از صفحه‌کلید هم استفاده کنید (Enter، Backspace، Escape).</span>
+        <span className="font-mono">%, (), .</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-(function(){
-  const ticketList = document.getElementById('ticket-list');
-  const btnNew = document.getElementById('btn-new');
-  const modalNew = new bootstrap.Modal(document.getElementById('modalNew'));
-  const inputTitle = document.getElementById('ticket-title');
-  const inputDesc = document.getElementById('ticket-desc');
-  const btnSave = document.getElementById('save-ticket');
+); }
 
-  let tickets = [];
-
-  // Load from localStorage with safety
-  try {
-    const saved = localStorage.getItem('cs_tickets');
-    tickets = saved ? JSON.parse(saved) : [];
-    if (!Array.isArray(tickets)) tickets = [];
-  } catch(e) {
-    console.warn("LocalStorage data invalid, resetting.", e);
-    tickets = [];
-    localStorage.removeItem('cs_tickets');
-  }
-
-  function renderTickets(){
-    ticketList.innerHTML = '';
-    if (tickets.length === 0) {
-      ticketList.innerHTML = '<div class="col-12 text-center text-muted">هیچ تیکتی ثبت نشده است.</div>';
-      return;
-    }
-    tickets.forEach((t, idx) => {
-      const col = document.createElement('div');
-      col.className = 'col-md-4';
-      col.innerHTML = `
-        <div class="card ticket-card p-3">
-          <h5>${t.title}</h5>
-          <p>${t.desc}</p>
-          <small class="text-muted">${new Date(t.date).toLocaleString('fa-IR')}</small>
-        </div>
-      `;
-      ticketList.appendChild(col);
-    });
-  }
-
-  btnNew.addEventListener('click', () => {
-    inputTitle.value = '';
-    inputDesc.value = '';
-    modalNew.show();
-  });
-
-  btnSave.addEventListener('click', () => {
-    const title = inputTitle.value.trim();
-    const desc = inputDesc.value.trim();
-    if (!title || !desc) {
-      alert('لطفاً همه فیلدها را پر کنید.');
-      return;
-    }
-    tickets.push({ title, desc, date: new Date().toISOString() });
-    localStorage.setItem('cs_tickets', JSON.stringify(tickets));
-    renderTickets();
-    modalNew.hide();
-  });
-
-  renderTickets();
-})();
-</script>
-</body>
-</html>
