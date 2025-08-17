@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -6,103 +5,188 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ماشین‌حساب حرفه‌ای — مکی لویمی</title>
   <style>
-    body {
-      font-family: Tahoma, sans-serif;
-      background: linear-gradient(180deg,#f8fafc 0%, #f1f5f9 100%);
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+    :root{
+      --bg:#f8fafc; --card:#fff; --text:#0f172a; --muted:#64748b; --accent:#0f172a;
+      --btn:#f1f5f9; --ring:#e2e8f0;
     }
-    .wrap { width: 100%; max-width: 420px; }
-    .title { text-align: center; font-size: 28px; font-weight: bold; }
-    .author { text-align: center; margin-top: 8px; }
-    .badge { background: #000; color:#fff; padding: 4px 12px; border-radius: 20px; }
-    .card { background:#fff; border-radius: 16px; padding:16px; margin-top:12px;
-            box-shadow:0 4px 16px rgba(0,0,0,.1);}
-    .screen { background:#f8fafc; border:1px solid #ddd; border-radius:12px; padding:12px;}
-    .expr { min-height:40px; font-family: monospace; font-size: 20px; text-align:right;}
-    .ans { font-family: monospace; font-size: 24px; text-align:right; margin-top:4px;}
-    .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px;}
-    .key { padding:14px; font-size:18px; font-weight:bold; border-radius:12px; border:1px solid #ddd; background:#f1f5f9; cursor:pointer;}
-    .key:active { transform: scale(0.95); }
-    .eq { background:#000; color:#fff; }
-    .toolbar { display:flex; gap:8px; margin:10px 0; }
-    .btn { flex:1; padding:10px; border-radius:12px; cursor:pointer; font-weight:bold;}
-    .btn-ac { background:#fee2e2; }
-    .btn-del { background:#ffedd5; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: Tahoma, Vazirmatn, sans-serif;
+      background: linear-gradient(180deg,#ffffff 0%, var(--bg) 100%);
+      color:var(--text); display:flex; align-items:center; justify-content:center; padding:20px;
+    }
+    .wrap{width:100%; max-width:420px}
+    .header{display:flex; align-items:center; justify-content:center; gap:12px; flex-direction:column}
+    .brand{display:flex; align-items:center; gap:10px}
+    .chip{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,#0f172a,#0b1220);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
+    .title{font-weight:900; font-size:20px}
+    .author{margin-top:6px; color:var(--muted); font-weight:700}
+    .badge{background:var(--text); color:#fff; padding:6px 12px; border-radius:999px; font-weight:800}
+
+    .card{margin-top:14px; background:var(--card); border:1px solid var(--ring); border-radius:16px; padding:14px; box-shadow:0 10px 24px rgba(15,23,42,.06)}
+    .screen{background:#f8fafc; border:1px solid var(--ring); border-radius:12px; padding:10px}
+    .expr{min-height:44px; font-family: ui-monospace, monospace; font-size:20px; text-align:right; word-break:break-all}
+    .row{display:flex; align-items:center; justify-content:space-between; margin-top:6px}
+    .hint{font-size:12px; color:var(--muted)}
+    .ans{font-family: ui-monospace, monospace; font-size:26px; text-align:right; color:var(--text); font-weight:800}
+
+    .toolbar{display:flex; gap:8px; margin:12px 0}
+    .btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ring);background:var(--btn);font-weight:800;cursor:pointer}
+    .btn-ac{background:#fee2e2;color:#b91c1c}
+    .btn-del{background:#ffedd5;color:#92400e}
+    .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+    .key{padding:14px;font-size:18px;font-weight:800;border-radius:12px;border:1px solid var(--ring);background:var(--btn);cursor:pointer;user-select:none}
+    .key:active{transform:scale(.98)}
+    .op{color:#0f172a}
+    .eq{background:var(--text); color:#fff}
+    .footer{margin-top:10px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px}
+    @media (max-width:420px){ .chip{width:40px;height:40px;font-size:18px} }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="title">ماشین‌حساب حرفه‌ای</div>
-    <div class="author">نویسنده: <span class="badge">مکی لویمی</span></div>
+    <div class="header">
+      <div class="brand">
+        <div class="chip" aria-hidden="true">ای</div>
+        <div>
+          <div class="title">ماشین‌حساب حرفه‌ای</div>
+          <div class="author">نویسنده: <span class="badge">مکی لویمی</span></div>
+        </div>
+      </div>
+    </div>
 
-    <div class="card">
-      <div class="screen">
+    <div class="card" role="region" aria-label="ماشین‌حساب">
+      <div class="screen" aria-live="polite">
         <div id="expr" class="expr">۰</div>
-        <div id="ans" class="ans">0</div>
+        <div class="row">
+          <div class="hint">نتیجهٔ زنده</div>
+          <div id="ans" class="ans">0</div>
+        </div>
       </div>
 
       <div class="toolbar">
-        <button id="ac" class="btn btn-ac">AC</button>
-        <button id="del" class="btn btn-del">حذف</button>
+        <button id="ac" class="btn btn-ac" aria-label="پاک کردن همه">AC</button>
+        <button id="del" class="btn btn-del" aria-label="حذف یک کاراکتر">حذف</button>
       </div>
 
-      <div class="grid" id="keys"></div>
+      <div class="grid" id="keys" aria-label="صفحه‌کلید"></div>
+
+      <div class="footer">
+        <div>از کیبورد استفاده کنید: Enter / Backspace / Escape</div>
+        <div dir="ltr">%, (), .</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const normalize = (s) => s.replace(/[۰-۹×÷−٪]/g, (m)=>({
-      "۰":"0","۱":"1","۲":"2","۳":"3","۴":"4","۵":"5",
-      "۶":"6","۷":"7","۸":"8","۹":"9","×":"*","÷":"/","−":"-","٪":"%"}[m]||m));
+    // نرمال‌سازی اعداد و علائم فارسی/عربی
+    const normalize = s => s.replace(/[۰-۹×÷−٪]/g, m => ({
+      "۰":"0","۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9",
+      "×":"*","÷":"/","−":"-","٪":"%"
+    }[m]||m));
+
+    // بررسی اینکه آخرین کاراکتر اپراتور است
+    const isOp = ch => ['+','-','*','/','%'].includes(ch);
+
+    function sanitizeAppend(current, toAdd){
+      // اگر toAdd اپراتور است و current خالی نباشد
+      if (isOp(toAdd)){
+        // اگر ته current هم اپراتور است: جایگزین کن (مثل ماشین حساب واقعی)
+        if (current === '') return current; // جلوگیری از شروع با اپراتور به جز منفی
+        if (isOp(current.slice(-1))) {
+          // اگر کاربر می‌خواهد '-' بعد از اپراتور بگذارد (مثلاً 5 * -3) اجازه بده
+          if (toAdd === '-' && current.slice(-1) !== '-') return current + toAdd;
+          // در غیر این صورت اپراتور آخر را جایگزین کن
+          return current.slice(0,-1) + toAdd;
+        }
+      }
+      // جلوگیری از چند نقطهٔ پشت سر هم در یک عدد
+      if (toAdd === '.') {
+        // پیدا کن عدد فعلی از آخر تا اولین اپراتور
+        const last = current.split(/[\+\-\*\/%]/).pop();
+        if (last.includes('.')) return current; // اجازه نده دوبار نقطه بشود
+      }
+      return current + toAdd;
+    }
 
     function evaluateExpression(expr){
       try {
-        const n = normalize(expr);
-        if (/[^0-9+\\-*/%().\\s]/.test(n)) return "خطا";
-        const pct = n.replace(/(\\d+(?:\\.\\d+)?)%/g, '($1/100)');
-        const val = Function('return (' + pct + ')')();
-        if (typeof val === 'number' && isFinite(val)) return val;
-        return "خطا";
-      } catch { return "خطا"; }
+        const n = normalize(expr).trim();
+        if (!n) return 0;
+        // ممنوعیت کاراکترهای غیرمجاز
+        if (/[^0-9+\-*/%().\s]/.test(n)) return 'خطا';
+        // تبدیل درصد: 50% -> (50/100)
+        const pct = n.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
+        // جلوگیری از ساختارهای خطرناک ساده
+        if (/\/\s*0(?!\d)|NaN|Infinity/.test(pct)) return 'خطا';
+        const val = Function('"use strict"; return (' + pct + ')')();
+        if (typeof val === 'number' && isFinite(val)) return Number(Math.round((val + Number.EPSILON) * 1e12) / 1e12);
+        return 'خطا';
+      } catch(e){ return 'خطا'; }
     }
 
     const KEYS = [
-      {l:"("},{l:")"},{l:"÷",v:"/"},{l:"×",v:"*"},
-      {l:"7"},{l:"8"},{l:"9"},{l:"−",v:"-"},
-      {l:"4"},{l:"5"},{l:"6"},{l:"+",v:"+"},
-      {l:"1"},{l:"2"},{l:"3"},{l:"%"},
-      {l:"0"},{l:"."},{l:"=",c:"eq"}
+      {l:'(', v:'('},{l:')', v:')'},{l:'÷', v:'/' , c:'op'},{l:'×', v:'*', c:'op'},
+      {l:'7', v:'7'},{l:'8', v:'8'},{l:'9', v:'9'},{l:'−', v:'-' , c:'op'},
+      {l:'4', v:'4'},{l:'5', v:'5'},{l:'6', v:'6'},{l:'+', v:'+' , c:'op'},
+      {l:'1', v:'1'},{l:'2', v:'2'},{l:'3', v:'3'},{l:'%', v:'%' , c:'op'},
+      {l:'0', v:'0'},{l:'.', v:'.'},{l:'=', v:'=' , c:'eq'}
     ];
 
-    const exprEl=document.getElementById("expr");
-    const ansEl=document.getElementById("ans");
-    const keysEl=document.getElementById("keys");
-    let expr="";
+    const exprEl = document.getElementById('expr');
+    const ansEl = document.getElementById('ans');
+    const keysEl = document.getElementById('keys');
+    const acBtn = document.getElementById('ac');
+    const delBtn = document.getElementById('del');
+
+    let expr = '';
 
     function render(){
-      exprEl.textContent = expr || "۰";
-      ansEl.textContent = expr ? evaluateExpression(expr) : "0";
+      exprEl.textContent = expr || '۰';
+      const r = expr ? evaluateExpression(expr) : 0;
+      ansEl.textContent = String(r);
     }
 
-    function press(k){
-      if(k==="="){ expr=String(evaluateExpression(expr)); render(); return;}
-      expr+=k; render();
+    function press(val){
+      if (val === '=') {
+        const r = evaluateExpression(expr);
+        if (typeof r === 'number') {
+          expr = String(r);
+        } else {
+          // در صورت خطا، عبارت پاک نمی‌شود اما نتیجه خطا نشان داده می‌شود
+        }
+        render();
+        return;
+      }
+      expr = sanitizeAppend(expr, val);
+      render();
     }
 
     KEYS.forEach(k=>{
-      const b=document.createElement("button");
-      b.className="key"+(k.c?(" "+k.c):"");
-      b.textContent=k.l;
-      b.onclick=()=>press(k.v||k.l);
-      keysEl.appendChild(b);
+      const btn = document.createElement('button');
+      btn.className = 'key' + (k.c ? (' '+k.c) : '');
+      btn.textContent = k.l;
+      btn.setAttribute('aria-label', 'کلید ' + k.l);
+      btn.addEventListener('click', ()=> press(k.v));
+      keysEl.appendChild(btn);
     });
 
-    document.getElementById("ac").onclick=()=>{expr=""; render();};
-    document.getElementById("del").onclick=()=>{expr=expr.slice(0,-1); render();};
+    acBtn.addEventListener('click', ()=>{ expr = ''; render(); });
+    delBtn.addEventListener('click', ()=>{ expr = expr.slice(0, -1); render(); });
+
+    // پشتیبانی از کیبورد (اعداد و عملگرها)
+    window.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if (key === 'Enter') { e.preventDefault(); press('='); return; }
+      if (key === 'Backspace') { e.preventDefault(); expr = expr.slice(0, -1); render(); return; }
+      if (key === 'Escape') { e.preventDefault(); expr = ''; render(); return; }
+      // نگاشت کلیدهای صفحه‌کلید به مقادیر مناسب
+      const map = {'*':'*','/':'/','+':'+','-':'-','.':'.','%':'%','(':'(',')':')'};
+      if (/[0-9]/.test(key)) { e.preventDefault(); expr = sanitizeAppend(expr, key); render(); return; }
+      if (map[key]) { e.preventDefault(); expr = sanitizeAppend(expr, map[key]); render(); return; }
+    });
+
     render();
   </script>
 </body>
