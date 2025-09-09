@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="fa" dir="rtl">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,55 +16,58 @@
           <p class="text-sm text-gray-500">سازنده: مهندس چاسب مطیری</p>
         </div>
         <div class="text-xs text-gray-400">v1.0</div>
-      </div><nav class="flex-1 overflow-auto">
-    <h2 class="text-xs uppercase text-gray-400 mb-2">انواع سویچ</h2>
-    <ul id="switchList" class="space-y-1"></ul>
+      </div>
 
-    <hr class="my-4" />
+      <nav class="flex-1 overflow-auto">
+        <h2 class="text-xs uppercase text-gray-400 mb-2">انواع سویچ</h2>
+        <ul id="switchList" class="space-y-1"></ul>
 
-    <h2 class="text-xs uppercase text-gray-400 mb-2">ابزارها</h2>
-    <ul class="space-y-2">
-      <li>
-        <a
-          class="block text-right px-3 py-2 rounded-lg hover:bg-gray-100"
-          href="https://github.com/new"
-          target="_blank"
-        >
-          ایجاد یا باز کردن مخزن در GitHub
-        </a>
-      </li>
-      <li>
-        <a
-          class="block text-right px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer"
-          onclick="logout()"
-        >
-          خروج (Logout)
-        </a>
-      </li>
-    </ul>
-  </nav>
+        <hr class="my-4" />
 
-  <div class="mt-4 text-xs text-gray-500">
-    صفحه نمونه — آماده انتشار روی GitHub Pages.
+        <h2 class="text-xs uppercase text-gray-400 mb-2">ابزارها</h2>
+        <ul class="space-y-2">
+          <li>
+            <a
+              class="block text-right px-3 py-2 rounded-lg hover:bg-gray-100"
+              href="https://github.com/new"
+              target="_blank"
+            >
+              ایجاد یا باز کردن مخزن در GitHub
+            </a>
+          </li>
+          <li>
+            <a
+              class="block text-right px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+              onclick="logout()"
+            >
+              خروج (Logout)
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="mt-4 text-xs text-gray-500">
+        صفحه نمونه — آماده انتشار روی GitHub Pages.
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">اطلاعات و مستندات سوییچ</h2>
+          <div class="text-sm text-gray-500">لینک‌ها در اینترنت باز می‌شوند</div>
+        </div>
+
+        <div id="switchInfo" class="bg-white border rounded-lg p-6 text-right">
+          <p class="mb-4">یک نوع سویچ از منوی سمت راست انتخاب کنید تا اطلاعات آن نمایش داده شود.</p>
+          <div class="text-sm text-gray-500">(برای باز کردن اطلاعات، روی دکمه «باز کردن» کلیک کنید)</div>
+        </div>
+      </div>
+    </main>
   </div>
-</aside>
 
-<!-- Main content -->
-<main class="flex-1 p-8">
-  <div class="max-w-4xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold">اطلاعات و مستندات سوییچ</h2>
-      <div class="text-sm text-gray-500">لینک‌ها در اینترنت باز می‌شوند</div>
-    </div>
-
-    <div id="switchInfo" class="bg-white border rounded-lg p-6 text-right">
-      <p class="mb-4">یک نوع سویچ از منوی سمت راست انتخاب کنید تا اطلاعات آن نمایش داده شود.</p>
-      <div class="text-sm text-gray-500">(برای باز کردن اطلاعات، روی دکمه «باز کردن» کلیک کنید)</div>
-    </div>
-  </div>
-</main>
-
-  </div>  <script>
+  <script>
     const switches = [
       {id: "cisco-2960", name: "Cisco Catalyst 2960 Series", desc: "راهنمای پیکربندی و مستندات سری 2960.", link: "https://www.cisco.com/c/en/us/support/switches/catalyst-2960-series-switches/tsd-products-support-series-home.html", tag: "Cisco"},
       {id: "cisco-2960x", name: "Cisco Catalyst 2960-X/XR", desc: "مستندات رسمی سری 2960-X/XR.", link: "https://www.cisco.com/c/en/us/support/switches/catalyst-2960-x-series-switches/tsd-products-support-series-home.html", tag: "Cisco"},
@@ -121,5 +125,6 @@
         window.location.href = "about:blank";
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
